@@ -8,9 +8,13 @@ global Nx dx
 fa_L = [V(:,Nx),V(:,1:Nx)];
 fa_R = [V(:,1:Nx),V(:,1)];
 
-% HLLC flux
-flux_L = HLLC_DF(fa_L(:,1:Nx),fa_R(:,1:Nx),gammaS,e0S);
-flux_R = HLLC_DF(fa_L(:,2:Nx+1),fa_R(:,2:Nx+1),gammaS,e0S);
+% % HLLC flux
+% flux_L = HLLC_DF(fa_L(:,1:Nx),fa_R(:,1:Nx),gammaS,e0S);
+% flux_R = HLLC_DF(fa_L(:,2:Nx+1),fa_R(:,2:Nx+1),gammaS,e0S);
+
+% HLLC Hu et al. 2009 flux
+flux_L = HLLC_HU09(fa_L(:,1:Nx),fa_R(:,1:Nx),gammaS,e0S,0);
+flux_R = HLLC_HU09(fa_L(:,2:Nx+1),fa_R(:,2:Nx+1),gammaS,e0S,1);
 
 % Calculate RHS
 RHS = -(flux_R-flux_L)/dx;

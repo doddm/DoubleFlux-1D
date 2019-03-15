@@ -5,7 +5,7 @@ clear all, close all, clc;
 global Nx dx x dt
 
 % CFL number
-CFL = 1;
+CFL = 0.1;
 
 % Grids (periodic)
 a = 0;
@@ -15,7 +15,7 @@ dx = (b-a)/Nx;
 x = a+dx/2:dx:b-dx/2; % cell center location
 
 % Initial conditions (sharp bump)
-eta = 1e-10;
+eta = 1e-1;
 T_L = 300;
 T_R = 100;
 T0 = T_L+(T_R-T_L)/2.0*(tanh((x-0.25)/eta)+tanh(-(x-0.75)/eta));
@@ -32,6 +32,7 @@ printInfo(W,V,0,0,0); % print information
 
 % Simulation time
 t_final = b/u0(1); % simulation end time = one period
+t_final = 0.000004;
 t_sim = 0; % simulation time
 step = 0; % time step
 CHECK = 100; % check interval
@@ -55,7 +56,9 @@ while (t_sim < t_final)
 
     % Store gammaS and e0S
     [gammaS,e0S] = getGammaSandE0S(V);
-
+    
+    fprintf('Total energy = %0.9e\n',sum(W(:,3)));
+    
     % Time marching with double-flux model (RK3)
     k1 = W + dt*getRHS_DF(W,V,gammaS,e0S);
     Vk1 = updatePrimitives_DF(k1,gammaS,e0S);
